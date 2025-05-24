@@ -1,28 +1,56 @@
-import { TitleAndTime,CardIsseus, CardPublication, DadosProfile, DashBoardHub, Description,  FormPublication,  HomeContainer, ImageContainer, ProfileContainer, PublicacaoContainer, TitleAndCount, TitleAndLink } from "./styles";
-// import iconGitHub from '../../assets/home/iconGitHub.svg';
+import { TitleAndTime,CardIsseus, CardPublication, DadosProfile, DashBoardHub, Description,  HomeContainer, ImageContainer, ProfileContainer, PublicacaoContainer, TitleAndCount, TitleAndLink } from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub} from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRightFromSquare, faBuilding, faUserGroup } from "@fortawesome/free-solid-svg-icons";
+import { FormPublicComp } from "../../components/FormPublicationComp";
+import { useEffect, useState} from "react";
+
+interface User{ 
+    name: string,
+    avatar_url: string,
+    html_url: string,
+    company: string,
+    bio: string,
+    login: string,
+    followers: number,
+}
 
 export function Home () {
+
+    // const [users, setUsers] = useState<User>([]);
+
+   const [gitHubUser, setGitHubUser] = useState<User>();
+
+   async function loadGitHubUser() {
+        const resposta = await fetch(`https://api.github.com/users/Abmaellf`)
+        const data = await resposta.json();
+     console.log(data)
+     setGitHubUser(data)
+   }
+
+    useEffect(() => {
+        loadGitHubUser() 
+    },[])
+
     return(
        <>
          <HomeContainer>
            <ProfileContainer>
 
                 <ImageContainer>
-                    <img src="https://github.com/Abmaellf.png" />
+                    <img src={gitHubUser?.avatar_url}/>
                 </ImageContainer>
 
              <DadosProfile>
 
                 <TitleAndLink> 
-                        <h2> Abmael Ferreira </h2>
+
+                        <h2> {gitHubUser?.name} </h2>
 
                         <div>
                             <span> GITHUB </span>
 
-                            <a href="https://github.com/Abmaellf">
+                            <a href={gitHubUser?.html_url} target="_blank">
                                 <FontAwesomeIcon  icon={faArrowUpRightFromSquare} /> 
                             </a>
 
@@ -31,28 +59,24 @@ export function Home () {
 
                 <Description> 
                         <span> 
-                            Me chamo Abmael Ferreira, tenho 37 anos e sou natural de Maracanaú - CE. Sou formado em 
-                            sistema de informação. Sou apaixonada por tecnologia e quero logo logo compartilho meu 
-                            conhecimento através do meu canal no YouTube "Abmael Ferreira".
-                        
+                            {gitHubUser?.bio}
                         </span>
                 </Description>
 
                 <DashBoardHub> 
-                    {/* <img src={iconGitHub} /> */}
                     <div> 
                         <FontAwesomeIcon icon={faGithub} />
-                        <a href="github"> Abmaellf </a>
+                        <a href="github"> {gitHubUser?.login} </a>
                     </div>
 
                     <div>
                         <FontAwesomeIcon icon={faBuilding} />
-                        <a href="github"> AbmaelFerreira </a>
+                        <a href="github"> {gitHubUser?.company} </a>
                     </div>
 
                     <div>
                         <FontAwesomeIcon icon={faUserGroup} />
-                        <a href="SEGUIDORES"> 100 Seguidores </a>
+                        <a href="SEGUIDORES"> {gitHubUser?.followers} Seguidores </a>
                     </div>
 
                 </DashBoardHub>
@@ -68,9 +92,7 @@ export function Home () {
                     <span> 6 publicações </span>
                 </TitleAndCount>
 
-                <FormPublication> 
-                    <input placeholder="Buscar conteúdo"/>
-                </FormPublication>
+                <FormPublicComp />
 
                 <CardPublication> 
 
@@ -133,9 +155,11 @@ export function Home () {
                         </TitleAndTime> 
                         <span> Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in </span>
                     </CardIsseus>
+
              </CardPublication> 
 
            </PublicacaoContainer>
+
         </HomeContainer>
        </>
     )
