@@ -27,7 +27,8 @@ export const ImageAndTitle = styled.div`
     }
 `
 export const ImageCenter = styled.div`
-   
+   width: 45px;
+   height: 4opx;
 `
 
 

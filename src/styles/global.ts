@@ -18,4 +18,9 @@ import { createGlobalStyle } from "styled-components";
 				font: 400 1rem Roboto, sans-serif;
 			}
 
+			:focus {
+				outline: transparent;
+				box-shadow: 0 0 0 2px ${(props)=> props.theme.blue};
+			}
+
 			`

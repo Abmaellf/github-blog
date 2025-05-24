@@ -21,23 +21,19 @@ export const ProfileContainer = styled.div`
     filter :drop-shadow(500mm 500mm 1200mm ${(props) => props.theme.blue});
     box-shadow: 10px 10px 30px ${(props)=> props.theme['base-input']};
     width: 864PX;
-    height: 212px;
+    height: 200px;
     margin-top: -88px ;
-    border-radius: 8px; 
+    border-radius: 10px; 
 `
 
 export const ImageContainer = styled.div`
-
     img {
-        width: 8rem;
-        height: 8rem;
+        width: 9rem;
+        height: 9rem;
         margin: 2rem 3rem;
-        border-radius: 8px; 
-        
+        border-radius: 10px; 
 }
-   
 `
-
 export const DadosProfile = styled.div`
     display: flex;
     flex-direction: column;
@@ -46,7 +42,7 @@ export const DadosProfile = styled.div`
         POIS ALIMINA O JUSTIFY-CONTENT DE SEUS FILHOS
      */
     justify-content: center;
-    width: 100%;
+    /* width: 100%; */
     margin-right: 20px;
 
 `
@@ -55,22 +51,131 @@ export const TitleAndLink = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* max-width: 100%; */
 
+    div {
+        gap: rem;
+        font-size: 12px;
+        font-family: "Nunito", sans-serif;
+        color: ${(props) => props.theme.blue};
+
+        a {
+            font-size: 12px;
+            font-family: "Nunito", sans-serif;
+            color: ${(props) => props.theme.blue};
+            margin-left: 5px;
+        }
+    }
+
+    h2 {
+        font-family: "Nunito", sans-serif;
+    }
 `
 
 export const Description = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    line-height: 24px;
+    line-height: 20px;
+    font-size: 14px;
+    font-family: "Nunito", sans-serif;
 `
 export const DashBoardHub =  styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 3rem;
-    width: 16px;
-    height:16px;
-  
+
+   a {
+        font-size: 14px;
+        font-family: "Nunito", sans-serif;
+        text-decoration: none;
+        color: ${(props) => props.theme['base-subtitle']};;
+   }
+
+`
+
+export const PublicacaoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 864PX;
+    margin-top: 10px;
+    margin-bottom: 200px;
+`
+
+export const TitleAndCount = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+
+    h2 {
+        font-size: 14px;
+        font-family: "Nunito", sans-serif;
+        color:  ${(props)=> props.theme['base-subtitle']};
+    }
+    
+`
+
+export const FormPublication =  styled.form`
+    /* width: 100%; */
+
+    input {
+        width: 100%;
+        padding: 10px;
+        /* color: ${(props)=> props.theme['base-label']}; */
+        background: ${(props)=> props.theme['base-input']};
+        border: solid 2px ${(props)=> props.theme['base-border']};
+        border-radius: 5px;
+
+        &::placeholder {
+            color: ${props => props.theme['base-label']};
+        }
+
+        &:placeholder:active {
+            color: ${props => props.theme['base-text']};
+        }
+
+        
+    }
+     
+
+   
+`
+
+export const CardPublication = styled.div`
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr; /* Cria duas colunas com a mesma largura */
+`
+
+export const CardIsseus = styled.div`
+    background : ${(props)=> props.theme['base-post']};
+    margin-top: 48px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 416px;
+    height: 260px;
+
+    span {
+        font-size: 14px;
+        font-family: "Nunito", sans-serif;
+        line-height: 1.6;
+        display: flex;
+        justify-content: flex-start;
+        margin: 16px;
+     }
+   
+`
+
+export const TitleAndTime = styled.div`
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     margin: 10px;
+
+     span {
+        margin: 10px;
+        font-size: 10px;
+        font-family: "Nunito", sans-serif;
+     }
 `
