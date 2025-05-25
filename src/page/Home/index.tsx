@@ -1,9 +1,11 @@
-import { TitleAndTime,CardIsseus, CardPublication, DadosProfile, DashBoardHub, Description,  HomeContainer, ImageContainer, ProfileContainer, PublicacaoContainer, TitleAndCount, TitleAndLink } from "./styles";
+import { TitleAndTime,CardIsseus, CardPublication, DadosProfile, DashBoardHub, Description,  HomeContainer, ImageContainer, ProfileContainer, PublicacaoContainer, TitleAndCount, TitleAndLink, BodyDescription } from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub} from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRightFromSquare, faBuilding, faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { FormPublicComp } from "../../components/FormPublicationComp";
 import { useEffect, useState} from "react";
+import {  formatDistanceToNow } from 'date-fns';
+import { ptBR } from "date-fns/locale";
 
 interface User{ 
     name: string,
@@ -15,11 +17,20 @@ interface User{
     followers: number,
 }
 
+interface Issue {
+    title: string,
+    created_at: string,
+    body: string
+
+}
+
 export function Home () {
 
-    // const [users, setUsers] = useState<User>([]);
+   const [issues, setIssues] = useState<Issue[]>([]);
 
    const [gitHubUser, setGitHubUser] = useState<User>();
+
+   
 
    async function loadGitHubUser() {
         const resposta = await fetch(`https://api.github.com/users/Abmaellf`)
@@ -28,9 +39,21 @@ export function Home () {
      setGitHubUser(data)
    }
 
+   async function loadGitHubIssues() {
+        const resposta = await fetch(`https://api.github.com/repos/Abmaellf/github-blog/issues`)
+        //   const resposta = await fetch(`https://api.github.com/repos/rocketseat-education/reactjs-github-blog-challenge/issues`)
+        const data = await resposta.json();
+     console.log(data)
+     
+     setIssues(data)
+   }
+
     useEffect(() => {
-        loadGitHubUser() 
+        loadGitHubUser()
+        loadGitHubIssues()
     },[])
+
+    const publishetCount = issues.length;
 
     return(
        <>
@@ -84,79 +107,44 @@ export function Home () {
             </DadosProfile>
            </ProfileContainer>
 
-
+       
            <PublicacaoContainer>
 
                 <TitleAndCount> 
                     <h2> Publicações </h2>
-                    <span> 6 publicações </span>
+                    <span> {publishetCount} publicações </span>
                 </TitleAndCount>
 
                 <FormPublicComp />
+                    <CardPublication> 
+                        {issues.map((issue) => {
+                                const createdAtIssue = formatDistanceToNow(issue.created_at, {
+                                    locale: ptBR,
+                                    addSuffix: true
 
-                <CardPublication> 
+                                })
+                                    return(
+                                    
 
-                    <CardIsseus>
-                        <TitleAndTime>
-                            
-                            <h4> JavaScript data types and data structures</h4>
-                            <span>Há 1 dia</span>
+                                        <CardIsseus>
+                                            <TitleAndTime>
+                                                
+                                                <h4> {issue.title} </h4>
 
-                        </TitleAndTime>
-                        <span> Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in </span>
-                    </CardIsseus>
+                                                {/* <span> {dateFormatter.format(new Date(issue.created_at))} </span> */}
+                                                <span> {createdAtIssue} </span>
 
-                    <CardIsseus>
-                        <TitleAndTime>
-                            
-                            <h4> JavaScript data types and data structures</h4>
-                            <span>Há 1 dia</span>
+                                            </TitleAndTime>
 
-                        </TitleAndTime> 
-                        <span> Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in </span>
-                    </CardIsseus>
-            
-                     <CardIsseus>
-                          <TitleAndTime>
-                            
-                            <h4> JavaScript data types and data structures</h4>
-                            <span>Há 1 dia</span>
+                                            <BodyDescription>
+                                                <span> {issue.body} </span>
+                                            </BodyDescription>
 
-                        </TitleAndTime> 
-                        <span> Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in </span>
-                    </CardIsseus>
-
-                     <CardIsseus>
-                        <TitleAndTime>
-                            
-                            <h4> JavaScript data types and data structures</h4>
-                            <span>Há 1 dia</span>
-
-                        </TitleAndTime> 
-                        <span> Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in </span>
-                    </CardIsseus>
-
-                    <CardIsseus>
-                       <TitleAndTime>
-                            
-                            <h4> JavaScript data types and data structures</h4>
-                            <span>Há 1 dia</span>
-
-                        </TitleAndTime>
-                        <span> Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in </span>
-                    </CardIsseus>
-
-                    <CardIsseus>
-                        <TitleAndTime>
-                            
-                            <h4> JavaScript data types and data structures</h4>
-                            <span>Há 1 dia</span>
-
-                        </TitleAndTime> 
-                        <span> Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in </span>
-                    </CardIsseus>
-
-             </CardPublication> 
+                                        </CardIsseus>
+                                    )
+                        })
+                     }
+                    </CardPublication> 
 
            </PublicacaoContainer>
 

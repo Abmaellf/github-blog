@@ -131,14 +131,7 @@ export const CardIsseus = styled.div`
     width: 416px;
     height: 260px;
 
-    span {
-        font-size: 14px;
-        font-family: "Nunito", sans-serif;
-        line-height: 1.6;
-        display: flex;
-        justify-content: flex-start;
-        margin: 16px;
-     }
+    
    
 `
 
@@ -152,5 +145,28 @@ export const TitleAndTime = styled.div`
         margin: 10px;
         font-size: 10px;
         font-family: "Nunito", sans-serif;
+     }
+`
+
+export const BodyDescription = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin: 16px;   
+
+    max-width: 500px;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis; 
+    -webkit-line-clamp: 5; // Quantidade de linhas
+    -webkit-box-orient: vertical;
+
+    span {
+        
+        font-size: 14px;
+        font-family: "Nunito", sans-serif;
+        line-height: 1.6;
+       
+        
+        
      }
 `
