@@ -3,6 +3,7 @@ import { Header } from "./components/Header"
 import { defaultTheme } from "./styles/themes/default"
 import { GlobalStyle } from "./styles/global"
 import { Home } from "./page/Home"
+import { IssueContextProvider } from "./context/IssueContext"
 
 
 export function App() {
@@ -11,7 +12,9 @@ export function App() {
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyle />
       <Header />
-      <Home />  
+      <IssueContextProvider>
+        <Home />  
+      </IssueContextProvider>
     </ThemeProvider>
   )
 }

@@ -3,9 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub} from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRightFromSquare, faBuilding, faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import { FormPublicComp } from "../../components/FormPublicationComp";
-import { useEffect, useState} from "react";
+import { useContext, useEffect, useState} from "react";
 import {  formatDistanceToNow } from 'date-fns';
 import { ptBR } from "date-fns/locale";
+import { IssueContext } from "../../context/IssueContext";
 
 interface User{ 
     name: string,
@@ -17,16 +18,11 @@ interface User{
     followers: number,
 }
 
-interface Issue {
-    title: string,
-    created_at: string,
-    body: string
 
-}
 
 export function Home () {
 
-   const [issues, setIssues] = useState<Issue[]>([]);
+  const { issues } = useContext(IssueContext);
 
    const [gitHubUser, setGitHubUser] = useState<User>();
 
@@ -39,21 +35,12 @@ export function Home () {
      setGitHubUser(data)
    }
 
-   async function loadGitHubIssues() {
-        const resposta = await fetch(`https://api.github.com/repos/Abmaellf/github-blog/issues`)
-        //   const resposta = await fetch(`https://api.github.com/repos/rocketseat-education/reactjs-github-blog-challenge/issues`)
-        const data = await resposta.json();
-     console.log(data)
-     
-     setIssues(data)
-   }
-
     useEffect(() => {
         loadGitHubUser()
-        loadGitHubIssues()
     },[])
 
-    const publishetCount = issues.length;
+    const publishetCount = issues;
+    console.log(publishetCount)
 
     return(
        <>
@@ -112,7 +99,7 @@ export function Home () {
 
                 <TitleAndCount> 
                     <h2> Publicações </h2>
-                    <span> {publishetCount} publicações </span>
+                    {/* <span> {publishetCount} publicações </span> */}
                 </TitleAndCount>
 
                 <FormPublicComp />
@@ -121,12 +108,10 @@ export function Home () {
                                 const createdAtIssue = formatDistanceToNow(issue.created_at, {
                                     locale: ptBR,
                                     addSuffix: true
-
                                 })
                                     return(
-                                    
 
-                                        <CardIsseus>
+                                        <CardIsseus key={issue.id}>
                                             <TitleAndTime>
                                                 
                                                 <h4> {issue.title} </h4>
