@@ -12,7 +12,6 @@ interface Issue {
 interface IssueContextType  {
     issues: Issue[];
     fetchIssuesChange: (pesquisa?: string) => Promise<void>;
- 
 }
 
 //Interface destinada para a tipagem do Parametro passado na FUNÇÃO PRINCIPAL DO ARQUIVO  
@@ -31,7 +30,6 @@ export function IssueContextProvider({children}: IssueContextProviderType ) {
 
     async function fetchIssuesChange(pesquisa?: string) {
         
-        // const url = new URL('https://api.github.com/search/issues')
         setIssues([])
 
         if(!pesquisa){
@@ -41,7 +39,6 @@ export function IssueContextProvider({children}: IssueContextProviderType ) {
             setIssues(data)
         } else {
             const resposta = await fetch(`https://api.github.com/search/issues?q=${pesquisa}%20repo:Abmaellf/github-blog`);
-           // const resposta = await fetch(url);
             const data = await resposta.json();
             console.log(data.items, "query")
             setIssues(data.items)
