@@ -1,8 +1,7 @@
-import { TitleAndTime,CardIsseus, CardPublication, DadosProfile, DashBoardHub, Description,  HomeContainer, ImageContainer, ProfileContainer, PublicacaoContainer, TitleAndCount, TitleAndLink, BodyDescription } from "./styles";
+import { TitleAndTime,CardIsseus, CardPublication, DadosProfile, DashBoardHub, Description,  HomeContainer, ImageContainer, ProfileContainer, PublicacaoContainer, TitleAndCount, TitleAndLink, BodyDescription, FormPublication } from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub} from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRightFromSquare, faBuilding, faUserGroup } from "@fortawesome/free-solid-svg-icons";
-import { FormPublicComp } from "../../components/FormPublicationComp";
 import { useContext, useEffect, useState} from "react";
 import {  formatDistanceToNow } from 'date-fns';
 import { ptBR } from "date-fns/locale";
@@ -18,29 +17,30 @@ interface User{
     followers: number,
 }
 
-
-
 export function Home () {
 
-  const { issues } = useContext(IssueContext);
+    const { issues, fetchIssuesChange} = useContext(IssueContext);
+    
+    const [gitHubUser, setGitHubUser] = useState<User>();
 
-   const [gitHubUser, setGitHubUser] = useState<User>();
+    const publishetCount = issues.length;
 
-   
-
-   async function loadGitHubUser() {
+   async function fetchGitHubUser() {
         const resposta = await fetch(`https://api.github.com/users/Abmaellf`)
         const data = await resposta.json();
-     console.log(data)
-     setGitHubUser(data)
+        setGitHubUser(data)
    }
+   
+   async function fetchIssuesChangeValue() {
+       event.preventDefault()
+       const pesquisa =  event?.target.value;
+       fetchIssuesChange(pesquisa) 
+    }
 
     useEffect(() => {
-        loadGitHubUser()
+        fetchGitHubUser()
+        
     },[])
-
-    const publishetCount = issues;
-    console.log(publishetCount)
 
     return(
        <>
@@ -93,43 +93,49 @@ export function Home () {
 
             </DadosProfile>
            </ProfileContainer>
-
        
            <PublicacaoContainer>
 
                 <TitleAndCount> 
                     <h2> Publicações </h2>
-                    {/* <span> {publishetCount} publicações </span> */}
+                    <span> {publishetCount} publicações </span>
                 </TitleAndCount>
 
-                <FormPublicComp />
-                    <CardPublication> 
-                        {issues.map((issue) => {
-                                const createdAtIssue = formatDistanceToNow(issue.created_at, {
-                                    locale: ptBR,
-                                    addSuffix: true
-                                })
-                                    return(
+                 <FormPublication > 
+                    <input  
+                        placeholder="Buscar conteúdo"
+                        name='issue'
+                        onChange={fetchIssuesChangeValue}
+                    />
+                </FormPublication>
 
-                                        <CardIsseus key={issue.id}>
-                                            <TitleAndTime>
-                                                
-                                                <h4> {issue.title} </h4>
+                <CardPublication> 
+                    {issues.map((issue) => {
+                            const createdAtIssue = formatDistanceToNow(issue.created_at, {
+                                locale: ptBR,
+                                addSuffix: true
+                            })
+                                return(
 
-                                                {/* <span> {dateFormatter.format(new Date(issue.created_at))} </span> */}
-                                                <span> {createdAtIssue} </span>
+                                    <CardIsseus key={issue.id}>
+                                        <TitleAndTime>
+                                            
+                                            <h4> {issue.title} </h4>
 
-                                            </TitleAndTime>
+                                            {/* <span> {dateFormatter.format(new Date(issue.created_at))} </span> */}
+                                            <span> {createdAtIssue} </span>
 
-                                            <BodyDescription>
-                                                <span> {issue.body} </span>
-                                            </BodyDescription>
+                                        </TitleAndTime>
 
-                                        </CardIsseus>
-                                    )
-                        })
-                     }
-                    </CardPublication> 
+                                        <BodyDescription>
+                                            <span> {issue.body} </span>
+                                        </BodyDescription>
+
+                                    </CardIsseus>
+                                )
+                    })
+                    }
+                </CardPublication> 
 
            </PublicacaoContainer>
 

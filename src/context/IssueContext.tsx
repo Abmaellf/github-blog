@@ -11,6 +11,8 @@ interface Issue {
 // Interface destinada aos ITENS TRAFEGADOS
 interface IssueContextType  {
     issues: Issue[];
+    fetchIssuesChange: (pesquisa?: string) => Promise<void>;
+ 
 }
 
 //Interface destinada para a tipagem do Parametro passado na FUNÇÃO PRINCIPAL DO ARQUIVO  
@@ -18,29 +20,40 @@ interface IssueContextProviderType {
     children: ReactNode;
 }
 
-//Constante retornada nessa função  e de importação nas paginas
+//Constante retornada nesta função com Provider RETURN(<IssueContext.Provider value={{ }}>  </IssueContext.Provider>)  
+//E de importação nas paginas que utiliza o context
  export const IssueContext = createContext({} as IssueContextType);
 
- //Função principal
+ //Função principal que deve ser utilizada no component App envolvendo todos os componentes que utiliza o context
 export function IssueContextProvider({children}: IssueContextProviderType ) {
 
-     const [issues, setIssues] = useState<Issue[]>([]);
+    const [issues, setIssues] = useState<Issue[]>([]);
 
-       async function loadGitHubIssues() {
-             const resposta = await fetch(`https://api.github.com/repos/Abmaellf/github-blog/issues`)
-             //   const resposta = await fetch(`https://api.github.com/repos/rocketseat-education/reactjs-github-blog-challenge/issues`)
-             const data = await resposta.json();
-          console.log(data)
-          
-          setIssues(data)
+    async function fetchIssuesChange(pesquisa?: string) {
+        
+        // const url = new URL('https://api.github.com/search/issues')
+        setIssues([])
+
+        if(!pesquisa){
+            const resposta =  await fetch(`https://api.github.com/repos/Abmaellf/github-blog/issues`);
+            const data = await resposta.json();
+            console.log(data, "query")
+            setIssues(data)
+        } else {
+            const resposta = await fetch(`https://api.github.com/search/issues?q=${pesquisa}%20repo:Abmaellf/github-blog`);
+           // const resposta = await fetch(url);
+            const data = await resposta.json();
+            console.log(data.items, "query")
+            setIssues(data.items)
         }
+    }
 
-         useEffect(() => {
-                loadGitHubIssues()
-            },[])
+    useEffect(() => {
+        fetchIssuesChange()
+    },[])
 
      return(
-        <IssueContext.Provider value={{issues}}>
+        <IssueContext.Provider value={{issues, fetchIssuesChange}}>
             {children}
         </IssueContext.Provider>
      )
