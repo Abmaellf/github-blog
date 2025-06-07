@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState, type ReactNode } from "react"
+import { api } from "../lib/axios";
 
 // Interface de Tipagem do useState e de um ou mais ITEM TRAFEGADO
 interface Issue {
@@ -33,10 +34,13 @@ export function IssueContextProvider({children}: IssueContextProviderType ) {
         setIssues([])
 
         if(!pesquisa){
-            const resposta =  await fetch(`https://api.github.com/repos/Abmaellf/github-blog/issues`);
-            const data = await resposta.json();
-            console.log(data, "query")
-            setIssues(data)
+            const resposta =  await api.get('repos/Abmaellf/github-blog/issues', {
+
+            });
+            // const data = await resposta.json();
+            console.log(resposta.data, "query")
+            setIssues(resposta.data)
+
         } else {
             const resposta = await fetch(`https://api.github.com/search/issues?q=${pesquisa}%20repo:Abmaellf/github-blog`);
             const data = await resposta.json();
