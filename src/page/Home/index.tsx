@@ -2,45 +2,28 @@ import { TitleAndTime,CardIsseus, CardPublication, DadosProfile, DashBoardHub, D
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub} from "@fortawesome/free-brands-svg-icons";
 import { faArrowUpRightFromSquare, faBuilding, faUserGroup } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useEffect, useState} from "react";
+import { useContext, useEffect} from "react";
 import {  formatDistanceToNow } from 'date-fns';
 import { ptBR } from "date-fns/locale";
 import { IssueContext } from "../../context/IssueContext";
-
-interface User{ 
-    name: string,
-    avatar_url: string,
-    html_url: string,
-    company: string,
-    bio: string,
-    login: string,
-    followers: number,
-}
+import { Link } from "react-router-dom";
+import { Post } from "../Post";
 
 export function Home () {
 
-    const { issues, fetchIssuesChange} = useContext(IssueContext);
-    
-    const [gitHubUser, setGitHubUser] = useState<User>();
-
+    const { issues, fetchIssuesChange, gitHubUser, fetchGitHubUser} = useContext(IssueContext);
     const publishetCount = issues.length;
-
-   async function fetchGitHubUser() {
-        const resposta = await fetch(`https://api.github.com/users/Abmaellf`)
-        const data = await resposta.json();
-        setGitHubUser(data)
-   }
    
-   async function fetchIssuesChangeValue() {
-       event.preventDefault()
-       const pesquisa =  event?.target.value;
+    async function fetchIssuesChangeValue(e: event) {
+       e.preventDefault()
+       const pesquisa =  e?.target.value;
        fetchIssuesChange(pesquisa) 
     }
 
     useEffect(() => {
         fetchGitHubUser()
         
-    },[])
+    },[fetchGitHubUser])
 
     return(
        <>
@@ -91,8 +74,8 @@ export function Home () {
 
                 </DashBoardHub>
 
-            </DadosProfile>
-           </ProfileContainer>
+              </DadosProfile>
+            </ProfileContainer>
        
            <PublicacaoContainer>
 
@@ -117,28 +100,29 @@ export function Home () {
                             })
                                 return(
 
-                                    <CardIsseus key={issue.id}>
-                                        <TitleAndTime>
-                                            
-                                            <h4> {issue.title} </h4>
+                                    <Link to={`post`}>
+                                        <CardIsseus key={issue.id}>
+                                            <TitleAndTime>
+                                                
+                                                <h4> {issue.title} </h4>
 
-                                            {/* <span> {dateFormatter.format(new Date(issue.created_at))} </span> */}
-                                            <span> {createdAtIssue} </span>
+                                                {/* <span> {dateFormatter.format(new Date(issue.created_at))} </span> */}
+                                                <span> {createdAtIssue} </span>
 
-                                        </TitleAndTime>
+                                            </TitleAndTime>
 
-                                        <BodyDescription>
-                                            <span> {issue.body} </span>
-                                        </BodyDescription>
+                                            <BodyDescription>
+                                                <span> {issue.body} </span>
+                                            </BodyDescription>
 
-                                    </CardIsseus>
+                                        </CardIsseus>
+                                    </Link>
                                 )
                     })
                     }
                 </CardPublication> 
 
            </PublicacaoContainer>
-
         </HomeContainer>
        </>
     )

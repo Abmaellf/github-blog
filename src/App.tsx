@@ -1,9 +1,11 @@
 import { ThemeProvider } from "styled-components"
-import { Header } from "./components/Header"
 import { defaultTheme } from "./styles/themes/default"
 import { GlobalStyle } from "./styles/global"
-import { Home } from "./page/Home"
 import { IssueContextProvider } from "./context/IssueContext"
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { Home } from "./page/Home"
+import { Post } from "./page/Post"
+import { Header } from "./components/Header"
 
 
 export function App() {
@@ -13,7 +15,12 @@ export function App() {
       <GlobalStyle />
       <Header />
       <IssueContextProvider>
-        <Home />  
+        <BrowserRouter>
+           <Routes>
+                <Route path='/' element={<Home />}> </Route>
+                <Route path='/post' element={<Post />}> </Route>
+            </Routes>
+        </BrowserRouter>
       </IssueContextProvider>
     </ThemeProvider>
   )

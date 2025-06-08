@@ -121,6 +121,9 @@ export const CardPublication = styled.div`
     display: grid;
     gap: 1rem;
     grid-template-columns: 1fr 1fr; /* Cria duas colunas com a mesma largura */
+    Link {
+        text-decoration: none;
+    }
 `
 
 export const CardIsseus = styled.div`
